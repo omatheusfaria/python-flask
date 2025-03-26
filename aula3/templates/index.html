@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabuada</title>
+</head>
+<body>
+    <h1>Aprenda tabuada</h1>
+    <form action="/calcula_tabuada" method="post">
+        <label>Digite o numero da tabuada que deseja visualizar</label>
+        <input type="text" name="txt_numero"><br>
+        <input type="submit" value="Exibir tabuada">
+    </form>
+    {% if resultado %}
+    <table>
+        <tr>
+            <th>Numero</th>
+            <th>X</th>
+            <th>Numero</th>
+            <th>=</th>
+            <th>resultado</th>
+        </tr>
+        {% for x in resultado.valores %}
+        <tr>
+            <td align="center">{{resultado.tabuada_do}}</td>
+            <td>x</td>
+            <td align="center">{{loop.index0}}</td>
+            <td align="center">=</td>
+            <td align="center">{{x}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+</body>
+</html>
