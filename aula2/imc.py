@@ -31,4 +31,5 @@ def calcIMC_get():
         classificacao = 'Obesidade grave'
     
     return render_template('imc_calc.html', res_imc = imc, classificado = classificacao)
+
 app.run()
