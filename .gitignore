@@ -1,0 +1,35 @@
+# Ignorar ambiente virtual
+venv/
+.venv/
+
+# Ignorar qualquer pasta env/ em qualquer lugar do projeto
+**/env/
+
+# Ignorar dependências instaladas via pip (caso de dump acidental)
+*.egg-info/
+dist/
+build/
+
+# Ignorar arquivos temporários do Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignorar arquivos de cache e logs
+*.log
+*.sqlite3
+*.db
+
+# Ignorar arquivos do VSCode e IDEs
+.vscode/
+.idea/
+
+# Ignorar arquivos de sistema (Windows/macOS)
+.DS_Store
+Thumbs.db
+
+# Manter pastas importantes (não precisa colocar no .gitignore, só pra lembrar):
+# templates/
+# static/
+# *.py (arquivos Python do seu projeto)

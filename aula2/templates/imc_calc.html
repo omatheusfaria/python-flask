@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMC</title>
+    <link rel="stylesheet" type="text/css" href="static/bootstrap.css">
+</head>
+<body>
+    <h1>Calcular índice de massa corporal utilizando o método POST</h1>
+    <form class="form-control" action="calcular_imc_post" method="post">
+        <label class="form-label">Sua Altura</label>
+        <input class="form-control" type="text" name="txt_altura"><br>
+        <label class="form-label">Seu peso</label>
+        <input class="form-control" type="text" class="form-control-plaintext" name="txt_peso"><br>
+        <input class="btn btn-primary" type="submit" value="calcular">
+        <input class="btn btn-primary" type="reset" value="Limpar">
+    </form>
+
+    <h1>Calcular índice de massa corporal utilizando o método POST</h1>
+    <form class="form-control" action="calcular_imc_get" method="get">
+        <label class="form-label">Sua Altura</label>
+        <input class="form-control" type="text" name="txt_altura"><br>
+        <label class="form-label">Seu peso</label>
+        <input class="form-control" type="text" class="form-control-plaintext" name="txt_peso"><br>
+        <input class="btn btn-primary" type="submit" value="calcular">
+        <input class="btn btn-primary" type="reset" value="Limpar">
+    </form>
+    <h1>{{ res_imc }}</h1>
+    {{IMC}{classificado}}
+    {% if classificado == "MAGREZA" %}
+        <br>
+        <img src="">
+    {% else %}
+        {% if classificado == "SOBREPESO" %}
+            <br>
+            <img src="">
+        {% endif %}
+    {% endif %}
+</body>
+</html>
