@@ -24,7 +24,11 @@ def login():
     else:
         return render_template('index.html', senhaErrada = 'Usuário ou senha invalido!')
 
-@app.run('/cadastro')
+@app.route('/cadastro')
+def cadastro():
+    return render_template('cadusuario.html')
+
+@app.route('/cadastrar', methods=['POST'])
 def cadastrar_usuario():
     nome = request.form['nome']
     cpf = request.form['cpf']
@@ -35,8 +39,9 @@ def cadastrar_usuario():
                                  password='usr_aluno123',
                                  database='aula_fatec')
     mycursor = db.cursor()
-    query = "insert into matheusfaria_tbusuario (nome, cpf, senha) values('" + nome + "', '" + cpf "', '" + senha "')"
+    query = "insert into matheusfaria_tbusuario (nome, cpf, senha) values('" + nome + "', '" + cpf + "', '" + senha + "')"
     mycursor.execute(query)
     if db.commit():
-        
+        return render_template('cadusuario.html')
+
 app.run()
