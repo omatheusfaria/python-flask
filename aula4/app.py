@@ -23,5 +23,20 @@ def login():
         return 'Logou'
     else:
         return render_template('index.html', senhaErrada = 'Usuário ou senha invalido!')
-    
+
+@app.run('/cadastro')
+def cadastrar_usuario():
+    nome = request.form['nome']
+    cpf = request.form['cpf']
+    senha = request.form['senha']
+    db = mysql.connector.connect(host='201.232.3.86',
+                                 port=5000,
+                                 user='usr_aluno',
+                                 password='usr_aluno123',
+                                 database='aula_fatec')
+    mycursor = db.cursor()
+    query = "insert into matheusfaria_tbusuario (nome, cpf, senha) values('" + nome + "', '" + cpf "', '" + senha "')"
+    mycursor.execute(query)
+    if db.commit():
+        
 app.run()
