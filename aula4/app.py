@@ -43,5 +43,18 @@ def cadastrar_usuario():
     mycursor.execute(query)
     if db.commit():
         return render_template('cadusuario.html')
+@app.route('/update_usuario', methods=["POST"])
+def update_usuario(user):
+    db = mysql.connector.connect(host='201.232.3.86',
+                                 port=5000,
+                                 user='usr_aluno',
+                                 password='usr_aluno123',
+                                 database='aula_fatec')
+    mycursor = db.cursor()
+    query = "select user, email, id from matheusfaria_tbusuario where id = " + user
+    mycursor.execute(query)
+    resultado = mycursor.fetchall()
+    return render_template('cadusuario.html', opcao='alterar', usuario=resultado)
 
 app.run()
+
