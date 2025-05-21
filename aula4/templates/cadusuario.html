@@ -3,26 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Usuário</title>
     <link rel="stylesheet" href="../static/bootstrap.css">
+    <title>Cadastrar Usuario</title>
 </head>
 <body>
     <div class="container">
+        <br>
+        <h1 style="text-align: center;">Cadastro de Usuário</h1>
+        {%if opcao == "alterar" %}
+         {% for user in usuarios %}
+        <form action="/update_usuario" method="post">
+            <div class="form-group" style="margin: 10px;">
+                <label>Nome</label><input class="form-control" placeholder="Digite o Nome" type="text" name="txt_nome" value="{{ user[0] }}">
+            </div>
+        </form>
+        {% else %}
         <form action="/cadastrar_usuario" method="POST">
             <div class="form-group" style="margin: 10px;">
-                <label>Nome</label>
-                <input class="form-control" placeholder="Digite o nome" type="text" name="txt_nome" required>
-               
-                <label>CPF</label>
-                <input class="form-control" placeholder="Digite o CPF" type="text" name="txt_cpf" required>
-               
-                <label>Senha</label>
-                <input class="form-control" placeholder="Digite a senha" type="password" name="txt_senha" required>
-               
+                <label>Nome</label><input class="form-control" placeholder="Digite o nome" type="text" name="txt_nome" required>
+                <label>CPF</label><input class="form-control" placeholder="Digite o CPF" type="text" name="txt_cpf" required>
+                <label>Senha</label><input class="form-control" placeholder="Digite a senha" type="password" name="txt_senha" required>
                 <br>
                 <input class="btn btn-primary btn-block" type="submit" value="Salvar">
             </div>
         </form>
+        {% endif %}
+        <br>
+        <table class="table">
+            <tr>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Excluir</th>
+                <th>Alterar</th>
+            </tr>
+            {% for user in usuarios %}
+                <tr>
+                    <td>{{user[0] }}</td>
+                    <td>{{user[1] }}</td>
+                    <td>
+                        <a href= {{ url_for("excluir_usuario", user=user[3]) }}><img src="{{url_for('static', filename='img_excluir')}}" style="height: 30px; width: 30px;"></a>
+                    </td>
+                    <td>
+                        <a href= {{ url_for("alterar_usuario", user=user[3]) }}><img src="{{url_for('static', filename='alterar_excluir')}}"></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
     </div>
 </body>
 </html>
