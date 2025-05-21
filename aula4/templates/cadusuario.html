@@ -15,8 +15,14 @@
         <form action="/update_usuario" method="post">
             <div class="form-group" style="margin: 10px;">
                 <label>Nome</label><input class="form-control" placeholder="Digite o Nome" type="text" name="txt_nome" value="{{ user[0] }}">
+                <label>CPF</label><input class="form-control" placeholder="Digite o CPF" type="text" name="txt_cpf" value="{{ user[1] }}">
+                <label>Senha</label><input class="form-control" placeholder="Digite a Senha" type="password" name="txt_senha">
+                <input class="form-control" placeholder="Digite o nome" type="text" name="txt_id" hidden="true" value="{{ user[2] }}">
+                <br>
+                <input class="btn btn-primary" type="submit" value="Salvar alteração">
             </div>
         </form>
+        {% endfor %}
         {% else %}
         <form action="/cadastrar_usuario" method="POST">
             <div class="form-group" style="margin: 10px;">

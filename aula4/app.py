@@ -39,10 +39,40 @@ def cadastrar_usuario():
                                  password='usr_aluno123',
                                  database='aula_fatec')
     mycursor = db.cursor()
-    query = "insert into matheusfaria_tbusuario (nome, cpf, senha) values('" + nome + "', '" + cpf + "', '" + senha + "')"
+    query = "insert into matheusfaria_tbusuario (nome, cpf, senha) values(%s, %s, %s)"
+    values = (nome, cpf, senha)
+    mycursor.execute(query,values)
+    db.commit()
+    return render_template('caduser')
+
+@app.route('/caduser')
+def lista_user():
+    if session.get('logado') is None:
+        return redirect('/')
+    db = mysql.connector.connect(host='201.232.3.86',
+                                 port=5000,
+                                 user='usr_aluno',
+                                 password='usr_aluno123',
+                                 database='aula_fatec')
+    mycursor = db.cursor()
+    query = 'select user, cpf, senha, id from matheusfaria_tbusuario'
     mycursor.execute(query)
-    if db.commit():
-        return render_template('cadusuario.html')
+    resultado = mycursor.fetchall()
+    return render_template('cadusuario.html', opcao='listar', usuarios=resultado)
+
+@app.route('/alterar_usuario/<user>')
+def alterar_usuario(user):
+    db = mysql.connector.connect(host='201.232.3.86',
+                                 port=5000,
+                                 user='usr_aluno',
+                                 password='usr_aluno123',
+                                 database='aula_fatec')
+    mycursor = db.cursor()
+    query = "select user, cpf, id from matheusfaria_tbusuario where id =" + user
+    mycursor.execute(query)
+    resultado = mycursor.fetchall()
+    return render_template('cadusuario.html', opcao='alterar', usuarios=resultado)
+
 @app.route('/update_usuario', methods=["POST"])
 def update_usuario(user):
     db = mysql.connector.connect(host='201.232.3.86',
