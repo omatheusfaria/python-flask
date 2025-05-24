@@ -24,13 +24,13 @@
         </form>
         {% endfor %}
         {% else %}
-        <form action="/cadastrar_usuario" method="POST">
+        <form action="/cadastrar" method="POST">
             <div class="form-group" style="margin: 10px;">
                 <label>Nome</label><input class="form-control" placeholder="Digite o nome" type="text" name="txt_nome" required>
                 <label>CPF</label><input class="form-control" placeholder="Digite o CPF" type="text" name="txt_cpf" required>
                 <label>Senha</label><input class="form-control" placeholder="Digite a senha" type="password" name="txt_senha" required>
                 <br>
-                <input class="btn btn-primary btn-block" type="submit" value="Salvar">
+                <input class="btn btn-primary btn-block" type="submit" value="Cadastrar">
             </div>
         </form>
         {% endif %}

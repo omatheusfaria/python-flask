@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session, redirect
 import mysql.connector
 
 app = Flask(__name__)
@@ -17,7 +17,7 @@ def login():
                                  password='usr_aluno123',
                                  database='aula_fatec')
     mycursor = db.cursor()
-    query = "select, nome, cpf, senha from matheusfaria_tbusuarios where cpf = '" + cpf + "' and senha = '" + senha + "'"
+    query = "select nome, cpf, senha from matheusfaria_tbusuarios where cpf = '" + cpf + "' and senha = '" + senha + "'"
     mycursor.execute(query)
     if mycursor.fetchall():
         return 'Logou'
@@ -30,9 +30,9 @@ def cadastro():
 
 @app.route('/cadastrar', methods=['POST'])
 def cadastrar_usuario():
-    nome = request.form['nome']
-    cpf = request.form['cpf']
-    senha = request.form['senha']
+    nome = request.form['txt_nome']
+    cpf = request.form['txt_cpf']
+    senha = request.form['txt_senha']
     db = mysql.connector.connect(host='201.232.3.86',
                                  port=5000,
                                  user='usr_aluno',
@@ -43,7 +43,7 @@ def cadastrar_usuario():
     values = (nome, cpf, senha)
     mycursor.execute(query,values)
     db.commit()
-    return render_template('caduser')
+    return lista_user()
 
 @app.route('/caduser')
 def lista_user():
@@ -55,7 +55,7 @@ def lista_user():
                                  password='usr_aluno123',
                                  database='aula_fatec')
     mycursor = db.cursor()
-    query = 'select user, cpf, senha, id from matheusfaria_tbusuario'
+    query = 'select nome, cpf, senha, id from matheusfaria_tbusuario'
     mycursor.execute(query)
     resultado = mycursor.fetchall()
     return render_template('cadusuario.html', opcao='listar', usuarios=resultado)
@@ -68,23 +68,27 @@ def alterar_usuario(user):
                                  password='usr_aluno123',
                                  database='aula_fatec')
     mycursor = db.cursor()
-    query = "select user, cpf, id from matheusfaria_tbusuario where id =" + user
+    query = "select nome, cpf, id from matheusfaria_tbusuario where id =" + user
     mycursor.execute(query)
     resultado = mycursor.fetchall()
     return render_template('cadusuario.html', opcao='alterar', usuarios=resultado)
 
 @app.route('/update_usuario', methods=["POST"])
-def update_usuario(user):
+def update_usuario():
+    id = request.form['txt_id']
+    nome = request.form['txt_nome']
+    cpf = request.form['txt_cpf']
+    senha = request.form['txt_senha']
     db = mysql.connector.connect(host='201.232.3.86',
                                  port=5000,
                                  user='usr_aluno',
                                  password='usr_aluno123',
                                  database='aula_fatec')
     mycursor = db.cursor()
-    query = "select user, email, id from matheusfaria_tbusuario where id = " + user
+    query = "update matheusfaria_tbusuario set nome ='" + nome + "', cpf = '" + cpf + "', senha = '" + senha + "' where id = " + id
     mycursor.execute(query)
     resultado = mycursor.fetchall()
-    return render_template('cadusuario.html', opcao='alterar', usuario=resultado)
+    return redirect('/caduser')
 
 app.run()
 
