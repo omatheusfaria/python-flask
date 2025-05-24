@@ -33,3 +33,6 @@ Thumbs.db
 # templates/
 # static/
 # *.py (arquivos Python do seu projeto)
+
+.env
+#Ignora as configurações de conexão com o banco de dados
