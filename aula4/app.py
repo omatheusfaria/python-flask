@@ -30,10 +30,6 @@ def login():
     else:
         return render_template('index.html', senhaErrada = 'Usuário ou senha invalido!')
 
-@app.route('/cadastro')
-def cadastro():
-    return render_template('cadusuario.html')
-
 @app.route('/cadastrar', methods=['POST'])
 def cadastrar_usuario():
     nome = request.form['txt_nome']
@@ -47,7 +43,7 @@ def cadastrar_usuario():
         database=os.getenv('DB_NAME')
     )
     mycursor = db.cursor()
-    query = "insert into matheusfaria_tbusuario (nome, cpf, senha) values(%s, %s, %s)"
+    query = "insert into matheusfaria_tbusuarios (nome, cpf, senha) values(%s, %s, %s)"
     values = (nome, cpf, senha)
     mycursor.execute(query,values)
     db.commit()
@@ -65,7 +61,7 @@ def lista_user():
         database=os.getenv('DB_NAME')
     )
     mycursor = db.cursor()
-    query = 'select nome, cpf, senha, id from matheusfaria_tbusuario'
+    query = 'select nome, cpf, senha, id from matheusfaria_tbusuarios'
     mycursor.execute(query)
     resultado = mycursor.fetchall()
     return render_template('cadusuario.html', opcao='listar', usuarios=resultado)
@@ -80,7 +76,7 @@ def alterar_usuario(user):
         database=os.getenv('DB_NAME')
     )
     mycursor = db.cursor()
-    query = "select nome, cpf, id from matheusfaria_tbusuario where id =" + user
+    query = "select nome, cpf, id from matheusfaria_tbusuarios where id =" + user
     mycursor.execute(query)
     resultado = mycursor.fetchall()
     return render_template('cadusuario.html', opcao='alterar', usuarios=resultado)
@@ -99,7 +95,7 @@ def update_usuario():
         database=os.getenv('DB_NAME')
     )
     mycursor = db.cursor()
-    query = "update matheusfaria_tbusuario set nome ='" + nome + "', cpf = '" + cpf + "', senha = '" + senha + "' where id = " + id
+    query = "update matheusfaria_tbusuarios set nome ='" + nome + "', cpf = '" + cpf + "', senha = '" + senha + "' where id = " + id
     mycursor.execute(query)
     resultado = mycursor.fetchall()
     return redirect('/caduser')
