@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 import os
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, render_template, request, session, redirect, url_for
 import mysql.connector
 
 load_dotenv()
@@ -29,9 +29,22 @@ def login():
         return 'Logou'
     else:
         return render_template('index.html', senhaErrada = 'Usuário ou senha invalido!')
+    
 @app.route('/cadastro')
 def cadastro():
-    return render_template('cadusuario.html')
+    sucesso = request.args.get('sucesso')
+    db = mysql.connector.connect(
+        host=os.getenv('DB_HOST'),
+        port=int(os.getenv('DB_PORT')),
+        user=os.getenv('DB_USER'),
+        password=os.getenv('DB_PASSWORD'),
+        database=os.getenv('DB_NAME')
+    )
+    mycursor = db.cursor()
+    query = 'SELECT nome, cpf, senha, id FROM matheusfaria_tbusuarios'
+    mycursor.execute(query)
+    resultado = mycursor.fetchall()
+    return render_template('cadusuario.html', opcao='listar', usuarios=resultado, sucesso=sucesso)
     
 @app.route('/cadastrar', methods=['POST'])
 def cadastrar_usuario():
@@ -50,7 +63,7 @@ def cadastrar_usuario():
     values = (nome, cpf, senha)
     mycursor.execute(query,values)
     db.commit()
-    return lista_user()
+    return redirect(url_for('cadastro', sucesso=1))
 
 @app.route('/caduser')
 def lista_user():
@@ -99,9 +112,26 @@ def update_usuario():
     )
     mycursor = db.cursor()
     query = "update matheusfaria_tbusuarios set nome ='" + nome + "', cpf = '" + cpf + "', senha = '" + senha + "' where id = " + id
+    print (query)
     mycursor.execute(query)
-    resultado = mycursor.fetchall()
+    db.commit()
     return redirect('/caduser')
+
+@app.route('/excluir_usuario/<user>')
+def excluir_usuario(user):
+    db = mysql.connector.connect(
+        host=os.getenv('DB_HOST'),
+        port=int(os.getenv('DB_PORT')),
+        user=os.getenv('DB_USER'),
+        password=os.getenv('DB_PASSWORD'),
+        database=os.getenv('DB_NAME')
+    )
+    mycursor = db.cursor()
+    query = "DELETE FROM matheusfaria_tbusuarios WHERE id = %s"
+    mycursor.execute(query, (user,))
+    db.commit()
+    return redirect('/caduser')
+
 
 app.run()
 

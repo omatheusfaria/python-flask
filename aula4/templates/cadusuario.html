@@ -15,7 +15,7 @@
         <form action="/update_usuario" method="post">
             <div class="form-group" style="margin: 10px;">
                 <label>Nome</label><input class="form-control" placeholder="Digite o Nome" type="text" name="txt_nome" value="{{ user[0] }}">
-                <label>CPF</label><input class="form-control" placeholder="Digite o CPF" type="text" name="txt_cpf" value="{{ user[1] }}">
+                <label>CPF</label><input class="form-control cpf" placeholder="Digite o CPF" type="text" name="txt_cpf" value="{{ user[1] }}" maxlength="14">
                 <label>Senha</label><input class="form-control" placeholder="Digite a Senha" type="password" name="txt_senha">
                 <input class="form-control" placeholder="Digite o nome" type="text" name="txt_id" hidden="true" value="{{ user[2] }}">
                 <br>
@@ -27,10 +27,15 @@
         <form action="/cadastrar" method="POST">
             <div class="form-group" style="margin: 10px;">
                 <label>Nome</label><input class="form-control" placeholder="Digite o nome" type="text" name="txt_nome" required>
-                <label>CPF</label><input class="form-control" placeholder="Digite o CPF" type="text" name="txt_cpf" required>
+                <label>CPF</label><input class="form-control cpf" placeholder="Digite o CPF" type="text" name="txt_cpf" required maxlength="14">
                 <label>Senha</label><input class="form-control" placeholder="Digite a senha" type="password" name="txt_senha" required>
                 <br>
                 <input class="btn btn-primary btn-block" type="submit" value="Cadastrar">
+                {% if sucesso %}
+                    <div class="alert alert-success mt-3" role="alert">
+                        Usuário cadastrado com sucesso!
+                    </div>
+                {% endif %}
             </div>
         </form>
         {% endif %}
@@ -47,14 +52,29 @@
                     <td>{{user[0] }}</td>
                     <td>{{user[1] }}</td>
                     <td>
-                        <a href= {{ url_for("excluir_usuario", user=user[3]) }}><img src="{{url_for('static', filename='img_excluir')}}" style="height: 30px; width: 30px;"></a>
+                        <a href= {{ url_for("excluir_usuario", user=user[3]) }}><img src="{{url_for('static', filename='img_excluir.png')}}" style="height: 30px; width: 30px;"></a>
                     </td>
                     <td>
-                        <a href= {{ url_for("alterar_usuario", user=user[3]) }}><img src="{{url_for('static', filename='alterar_excluir')}}"></a>
+                        <a href= {{ url_for("alterar_usuario", user=user[3]) }}><img src="{{url_for('static', filename='img_alterar.png')}}" style="height: 30px; width: 30px;"></a>
                     </td>
                 </tr>
             {% endfor %}
         </table>
     </div>
+
+    <script>
+        const cpfInputs = document.querySelectorAll('.cpf');
+    
+        cpfInputs.forEach(function(cpfInput) {
+            cpfInput.addEventListener('input', function() {
+                let cpf = cpfInput.value;
+                cpf = cpf.replace(/\D/g, '');
+                cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+                cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+                cpf = cpf.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                cpfInput.value = cpf;
+            });
+        });
+    </script>
 </body>
 </html>
