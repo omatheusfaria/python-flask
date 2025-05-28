@@ -3,9 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="../static/bootstrap.css">
+    <title>Cadastro Cliente</title>
 </head>
 <body>
-    
+    <nav><a href="/menu" class="btn btn-primary btn-block" role="button" style="margin: 5px;">Voltar</a></nav>
+    <div class="container">
+        <br>
+        <h1 style="text-align: center;">Cadastro de Cliente</h1>
+        {%if opcao == "alterar" %}
+         {% for user in clientes %}
+        <form action="/update_cliente" method="post">
+            <div class="form-group" style="margin: 10px;">
+                <label>Nome</label><input class="form-control" placeholder="Digite o Nome" type="text" name="txt_nome" value="{{ user[0] }}">
+                <label>CPF</label><input class="form-control cpf" placeholder="Digite o CPF" type="text" name="txt_cpf" value="{{ user[1] }}" maxlength="14">
+                <label>RG</label><input class="form-control rg" placeholder="Digite o RG" type="text" name="txt_rg" value="{{ user[2] }}" maxlength="11">
+                <label>Celular</label><input class="form-control cel" placeholder="Digite o Celular" type="text" name="txt_cel" value="{{ user[3] }}" maxlength="15">
+                <label>Rua</label><input class="form-control" placeholder="Digite a rua" type="text" name="txt_rua" value="{{ user[4] }}">
+                <label>Bairro</label><input class="form-control" placeholder="Digite o bairro" type="text" name="txt_bairro" value="{{ user[5] }}">
+                <label>Cidade</label><input class="form-control" placeholder="Digite a cidade" type="text" name="txt_cidade" value="{{ user[6] }}">
+                <label>CEP</label><input class="form-control cep" placeholder="Digite o CEP" type="text" name="txt_cep" value="{{ user[7] }}" maxlength="9">
+                <label>UF</label><input class="form-control" placeholder="Digite o UF" type="text" name="txt_uf" value="{{ user[8] }}">
+                <input class="form-control" placeholder="" type="text" name="txt_id" hidden="true" value="{{ user[9] }}">
+                <br>
+                <input class="btn btn-primary" type="submit" value="Salvar alteração">
+            </div>
+        </form>
+        {% endfor %}
+        {% else %}
+        <form action="/cadastrar_cliente" method="POST">
+            <div class="form-group" style="margin: 10px;">
+                <label>Nome</label><input class="form-control" placeholder="Digite o Nome" type="text" name="txt_nome">
+                <label>CPF</label><input class="form-control cpf" placeholder="Digite o CPF" type="text" name="txt_cpf" maxlength="14">
+                <label>RG</label><input class="form-control rg" placeholder="Digite o RG" type="text" name="txt_rg" maxlength="11">
+                <label>Celular</label><input class="form-control cel" placeholder="Digite o Celular" type="text" name="txt_cel" maxlength="15">
+                <label>Rua</label><input class="form-control" placeholder="Digite a rua" type="text" name="txt_rua">
+                <label>Bairro</label><input class="form-control" placeholder="Digite o bairro" type="text" name="txt_bairro">
+                <label>Cidade</label><input class="form-control" placeholder="Digite a cidade" type="text" name="txt_cidade">
+                <label>CEP</label><input class="form-control cep" placeholder="Digite o CEP" type="text" name="txt_cep" maxlength="9">
+                <label>UF</label><input class="form-control" placeholder="Digite o UF" type="text" name="txt_uf">
+                <input class="form-control" placeholder="" type="text" name="txt_id" hidden="true">
+                <br>
+                <input class="btn btn-primary btn-block" type="submit" value="Cadastrar">
+            </div>
+        </form>
+        {% endif %}
+        <br>
+        <table class="table">
+            <tr>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>RG</th>
+                <th>Celular</th>
+                <th>Rua</th>
+                <th>Bairro</th>
+                <th>Cidade</th>
+                <th>CEP</th>
+                <th>UF</th>
+                <th>Excluir</th>
+                <th>Alterar</th>
+            </tr>
+            {% for user in clientes %}
+                <tr>
+                    <td>{{user[0] }}</td>
+                    <td>{{user[1] }}</td>
+                    <td>{{user[2] }}</td>
+                    <td>{{user[3] }}</td>
+                    <td>{{user[4] }}</td>
+                    <td>{{user[5] }}</td>
+                    <td>{{user[6] }}</td>
+                    <td>{{user[7] }}</td>
+                    <td>{{user[8] }}</td>
+                    <td>
+                        <a href= {{ url_for("excluir_cliente", user=user[9]) }}><img src="{{url_for('static', filename='img_excluir.png')}}" style="height: 30px; width: 30px;"></a>
+                    </td>
+                    <td>
+                        <a href= {{ url_for("alterar_cliente", user=user[9]) }}><img src="{{url_for('static', filename='img_alterar.png')}}" style="height: 30px; width: 30px;"></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <script>
+            // Formatar CPF: 111.111.111-11
+            const cpfInputs = document.querySelectorAll('.cpf');
+            cpfInputs.forEach(function(input) {
+                input.addEventListener('input', function() {
+                    let value = input.value.replace(/\D/g, '');
+                    value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                    value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                    value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                    input.value = value;
+                });
+            });
+
+            // Formatar RG: 11.111.111-2
+            const rgInputs = document.querySelectorAll('.rg');
+            rgInputs.forEach(function(input) {
+                input.addEventListener('input', function() {
+                    let value = input.value.replace(/\D/g, '');
+                    value = value.replace(/(\d{2})(\d)/, '$1.$2');
+                    value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                    value = value.replace(/(\d{3})(\d{1})$/, '$1-$2');
+                    input.value = value;
+                });
+            });
+
+            // Formatar Celular: (11) 11111-1111
+            const celInputs = document.querySelectorAll('.cel');
+            celInputs.forEach(function(input) {
+                input.addEventListener('input', function() {
+                    let value = input.value.replace(/\D/g, '');
+                    value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
+                    value = value.replace(/(\d{5})(\d)/, '$1-$2');
+                    input.value = value;
+                });
+            });
+
+            // Formatar CEP: 11111-111
+            const cepInputs = document.querySelectorAll('.cep');
+            cepInputs.forEach(function(input) {
+                input.addEventListener('input', function() {
+                    let value = input.value.replace(/\D/g, '');
+                    value = value.replace(/(\d{5})(\d)/, '$1-$2');
+                    input.value = value;
+                });
+            });
+        </script>
 </body>
 </html>

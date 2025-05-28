@@ -3,9 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="../static/bootstrap.css">
+    <title>Menu</title>
+    <style>
+        body, html {
+            height: 100%;
+        }
+        .centered-container {
+            min-height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
-    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquid veniam adipisci recusandae iure rerum? Quaerat sit nisi, nam, consequatur iure voluptatibus maxime nesciunt asperiores earum hic provident tenetur suscipit commodi.</p>
+    {% if sucesso == "1" %}
+        <div class="alert alert-success mt-3" role="alert">
+            Usuário cadastrado com sucesso!
+        </div>
+    {% endif %}
+    {% if sucesso == "2" %}
+        <div class="alert alert-success mt-3" role="alert">
+            Cliente cadastrado com sucesso!
+        </div>
+    {% endif %}
+    <div class="centered-container">
+        <div class="container text-center">
+            <h1 class="mb-4">Menu Principal</h1>
+    
+            <a href="/cadastro" class="btn btn-primary btn-block" role="button" style="margin: 5px;">Cadastro de Usuário</a><br>
+            <a href="/cadcliente" class="btn btn-primary btn-block" role="button" style="margin: 5px;">Cadastro de Cliente</a>
+    
+        </div>
+    </div>
 </body>
 </html>

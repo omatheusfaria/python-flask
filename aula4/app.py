@@ -26,13 +26,12 @@ def login():
     query = "select nome, cpf, senha from matheusfaria_tbusuarios where cpf = '" + cpf + "' and senha = '" + senha + "'"
     mycursor.execute(query)
     if mycursor.fetchall():
-        return 'Logou'
+        return redirect('menu')
     else:
         return render_template('index.html', senhaErrada = 'Usuário ou senha invalido!')
     
 @app.route('/cadastro')
 def cadastro():
-    sucesso = request.args.get('sucesso')
     db = mysql.connector.connect(
         host=os.getenv('DB_HOST'),
         port=int(os.getenv('DB_PORT')),
@@ -44,7 +43,7 @@ def cadastro():
     query = 'SELECT nome, cpf, senha, id FROM matheusfaria_tbusuarios'
     mycursor.execute(query)
     resultado = mycursor.fetchall()
-    return render_template('cadusuario.html', opcao='listar', usuarios=resultado, sucesso=sucesso)
+    return render_template('cadusuario.html', opcao='listar', usuarios=resultado)
     
 @app.route('/cadastrar', methods=['POST'])
 def cadastrar_usuario():
@@ -63,7 +62,7 @@ def cadastrar_usuario():
     values = (nome, cpf, senha)
     mycursor.execute(query,values)
     db.commit()
-    return redirect(url_for('cadastro', sucesso=1))
+    return redirect(url_for('menu', sucesso=1))
 
 @app.route('/caduser')
 def lista_user():
@@ -132,6 +131,105 @@ def excluir_usuario(user):
     db.commit()
     return redirect('/caduser')
 
+@app.route('/menu')
+def menu():
+    sucesso = request.args.get('sucesso')
+    return render_template('menu.html', sucesso=sucesso)
 
+@app.route('/cadcliente')
+def cadcliente():
+    db = mysql.connector.connect(
+        host=os.getenv('DB_HOST'),
+        port=int(os.getenv('DB_PORT')),
+        user=os.getenv('DB_USER'),
+        password=os.getenv('DB_PASSWORD'),
+        database=os.getenv('DB_NAME')
+    )
+    mycursor = db.cursor()
+    query = 'SELECT nome, cpf, rg, celular, rua, bairro, cidade, cep, uf, id FROM matheusfaria_tbclientes'
+    mycursor.execute(query)
+    resultado = mycursor.fetchall()
+    return render_template('cadcliente.html', opcao='listar', clientes=resultado)
+
+@app.route('/cadastrar_cliente', methods=['POST'])
+def cadastrar_cliente():
+    nome = request.form['txt_nome']
+    cpf = request.form['txt_cpf']
+    rg = request.form['txt_rg']
+    cel = request.form['txt_cel']
+    rua = request.form['txt_rua']
+    bairro = request.form['txt_bairro']
+    cidade = request.form['txt_cidade']
+    cep = request.form['txt_cep']
+    uf = request.form['txt_uf']
+    db = mysql.connector.connect(
+        host=os.getenv('DB_HOST'),
+        port=int(os.getenv('DB_PORT')),
+        user=os.getenv('DB_USER'),
+        password=os.getenv('DB_PASSWORD'),
+        database=os.getenv('DB_NAME')
+    )
+    mycursor = db.cursor()
+    query = "insert into matheusfaria_tbclientes (nome, cpf, rg, celular, rua, bairro, cidade, cep, uf) values(%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    values = (nome, cpf, rg, cel, rua, bairro, cidade, cep, uf)
+    mycursor.execute(query,values)
+    db.commit()
+    return redirect(url_for('menu', sucesso=2))
+
+@app.route('/alterar_cliente/<user>')
+def alterar_cliente(user):
+    db = mysql.connector.connect(
+        host=os.getenv('DB_HOST'),
+        port=int(os.getenv('DB_PORT')),
+        user=os.getenv('DB_USER'),
+        password=os.getenv('DB_PASSWORD'),
+        database=os.getenv('DB_NAME')
+    )
+    mycursor = db.cursor()
+    query = "select nome, cpf, rg, celular, rua, bairro, cidade, cep, uf, id FROM matheusfaria_tbclientes where id =" + user
+    mycursor.execute(query)
+    resultado = mycursor.fetchall()
+    return render_template('cadcliente.html', opcao='alterar', clientes=resultado)
+
+@app.route('/update_cliente', methods=["POST"])
+def update_cliente():
+    id = request.form['txt_id']
+    nome = request.form['txt_nome']
+    cpf = request.form['txt_cpf']
+    rg = request.form['txt_rg']
+    cel = request.form['txt_cel']
+    rua = request.form['txt_rua']
+    bairro = request.form['txt_bairro']
+    cidade = request.form['txt_cidade']
+    cep = request.form['txt_cep']
+    uf = request.form['txt_uf']
+    db = mysql.connector.connect(
+        host=os.getenv('DB_HOST'),
+        port=int(os.getenv('DB_PORT')),
+        user=os.getenv('DB_USER'),
+        password=os.getenv('DB_PASSWORD'),
+        database=os.getenv('DB_NAME')
+    )
+    mycursor = db.cursor()
+    query = "update matheusfaria_tbclientes set nome ='" + nome + "', cpf = '" + cpf + "', rg = '" + rg + "', celular = '" + cel + "', rua = '" + rua + "', bairro = '" + bairro + "', cidade = '" + cidade + "', cep = '" + cep + "', uf = '" + uf + "' where id = " + id
+    print (query)
+    mycursor.execute(query)
+    db.commit()
+    return redirect('/cadcliente')
+
+@app.route('/excluir_cliente/<user>')
+def excluir_cliente(user):
+    db = mysql.connector.connect(
+        host=os.getenv('DB_HOST'),
+        port=int(os.getenv('DB_PORT')),
+        user=os.getenv('DB_USER'),
+        password=os.getenv('DB_PASSWORD'),
+        database=os.getenv('DB_NAME')
+    )
+    mycursor = db.cursor()
+    query = "DELETE FROM matheusfaria_tbclientes WHERE id = %s"
+    mycursor.execute(query, (user,))
+    db.commit()
+    return redirect('/cadcliente')
 app.run()
 
