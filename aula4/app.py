@@ -29,7 +29,10 @@ def login():
         return 'Logou'
     else:
         return render_template('index.html', senhaErrada = 'Usuário ou senha invalido!')
-
+@app.route('/cadastro')
+def cadastro():
+    return render_template('cadusuario.html')
+    
 @app.route('/cadastrar', methods=['POST'])
 def cadastrar_usuario():
     nome = request.form['txt_nome']
