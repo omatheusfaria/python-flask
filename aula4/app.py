@@ -6,7 +6,7 @@ import mysql.connector
 load_dotenv()
 
 app = Flask(__name__)
-
+app.secret_key = os.getenv('SECRET_KEY')
 @app.route('/')
 def raiz():
     return render_template('index.html')
@@ -25,25 +25,12 @@ def login():
     mycursor = db.cursor()
     query = "select nome, cpf, senha from matheusfaria_tbusuarios where cpf = '" + cpf + "' and senha = '" + senha + "'"
     mycursor.execute(query)
-    if mycursor.fetchall():
+    resultado = mycursor.fetchone()
+    if resultado:
+        session['logado'] = True
         return redirect('menu')
     else:
         return render_template('index.html', senhaErrada = 'Usuário ou senha invalido!')
-    
-@app.route('/cadastro')
-def cadastro():
-    db = mysql.connector.connect(
-        host=os.getenv('DB_HOST'),
-        port=int(os.getenv('DB_PORT')),
-        user=os.getenv('DB_USER'),
-        password=os.getenv('DB_PASSWORD'),
-        database=os.getenv('DB_NAME')
-    )
-    mycursor = db.cursor()
-    query = 'SELECT nome, cpf, senha, id FROM matheusfaria_tbusuarios'
-    mycursor.execute(query)
-    resultado = mycursor.fetchall()
-    return render_template('cadusuario.html', opcao='listar', usuarios=resultado)
     
 @app.route('/cadastrar', methods=['POST'])
 def cadastrar_usuario():
@@ -133,11 +120,15 @@ def excluir_usuario(user):
 
 @app.route('/menu')
 def menu():
+    if session.get('logado') is None:
+        return redirect('/')
     sucesso = request.args.get('sucesso')
     return render_template('menu.html', sucesso=sucesso)
 
 @app.route('/cadcliente')
 def cadcliente():
+    if session.get('logado') is None:
+        return redirect('/')
     db = mysql.connector.connect(
         host=os.getenv('DB_HOST'),
         port=int(os.getenv('DB_PORT')),
