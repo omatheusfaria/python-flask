@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/bootstrap.css">
+    <title>Cadastro Carro</title>
+</head>
+<body>
+    <nav><a href="/menu" class="btn btn-primary btn-block" role="button" style="margin: 5px;">Voltar</a></nav>
+    <div class="container">
+        <br>
+        <h1 style="text-align: center;">Cadastro de Carro</h1>
+        {%if opcao == "alterar" %}
+         {% for user in carros %}
+        <form action="/update_carro" method="post">
+            <div class="form-group" style="margin: 10px;">
+                <label>Marca</label><input class="form-control" placeholder="Digite o Marca" type="text" name="txt_marca" value="{{ user[0] }}">
+                <label>Modelo</label><input class="form-control" placeholder="Digite o Modelo" type="text" name="txt_modelo" value="{{ user[1] }}" maxlength="14">
+                <label>Cor</label><input class="form-control" placeholder="Digite o Cor" type="text" name="txt_cor" value="{{ user[2] }}" maxlength="11">
+                <label>Placa</label><input class="form-control" placeholder="Digite o Placa" type="text" name="txt_placa" value="{{ user[3] }}" maxlength="15">
+                <label>Chassi</label><input class="form-control" placeholder="Digite a Chassi" type="text" name="txt_chassi" value="{{ user[4] }}">
+                <input class="form-control" placeholder="" type="text" name="txt_id" hidden="true" value="{{ user[5] }}">
+                <br>
+                <input class="btn btn-primary" type="submit" value="Salvar alteração">
+            </div>
+        </form>
+        {% endfor %}
+        {% else %}
+        <form action="/cadastrar_carro" method="post">
+            <div class="form-group" style="margin: 10px;">
+                <label>Marca</label><input class="form-control" placeholder="Digite o Marca" type="text" name="txt_marca">
+                <label>Modelo</label><input class="form-control modelo" placeholder="Digite o Modelo" type="text" name="txt_modelo" maxlength="14">
+                <label>Cor</label><input class="form-control" placeholder="Digite o Cor" type="text" name="txt_cor" maxlength="11">
+                <label>Placa</label><input class="form-control" placeholder="Digite o Placa" type="text" name="txt_placa" maxlength="15">
+                <label>Chassi</label><input class="form-control" placeholder="Digite a Chassi" type="text" name="txt_chassi">
+                <input class="form-control" placeholder="" type="text" name="txt_id" hidden="true">
+                <br>
+                <input class="btn btn-primary btn-block" type="submit" value="Cadastrar">
+            </div>
+        </form>
+        {% endif %}
+        <br>
+        <table class="table">
+            <tr>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Cor</th>
+                <th>Placa</th>
+                <th>Chassi</th>
+                <th>Excluir</th>
+                <th>Alterar</th>
+            </tr>
+            {% for user in carros %}
+                <tr>
+                    <td>{{user[0] }}</td>
+                    <td>{{user[1] }}</td>
+                    <td>{{user[2] }}</td>
+                    <td>{{user[3] }}</td>
+                    <td>{{user[4] }}</td>
+                    <td>
+                        <a href= {{ url_for("excluir_carro", user=user[5]) }}><img src="{{url_for('static', filename='img_excluir.png')}}" style="height: 30px; width: 30px;"></a>
+                    </td>
+                    <td>
+                        <a href= {{ url_for("alterar_carro", user=user[5]) }}><img src="{{url_for('static', filename='img_alterar.png')}}" style="height: 30px; width: 30px;"></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+</body>
+</html>

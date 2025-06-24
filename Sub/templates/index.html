@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/bootstrap.css">
+    <title>Login</title>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center">Login</h2>
+        <form action="/login" method="post">
+            <div class="form-group">
+                <label for="username">Login do usuario:</label>
+                <input type="text" id="login" name="login" class="form-control login" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Senha:</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Login</button>
+            <a href="/caduser" class="btn btn-primary btn-block" role="button" style="margin: 5px;">Cadastro de usuario</a><br>
+            {{ senhaErrada }}
+        </form>
+    </div>
+</body>
+</html>

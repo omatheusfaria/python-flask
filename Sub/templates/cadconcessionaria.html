@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/bootstrap.css">
+    <title>Cadastro Concessionaria</title>
+</head>
+<body>
+    <nav><a href="/menu" class="btn btn-primary btn-block" role="button" style="margin: 5px;">Voltar</a></nav>
+    <div class="container">
+        <br>
+        <h1 style="text-align: center;">Cadastro de Concessionaria</h1>
+        {%if opcao == "alterar" %}
+         {% for user in concessionarias %}
+        <form action="/update_concessionaria" method="post">
+            <div class="form-group" style="margin: 10px;">
+                <label>Nome</label><input class="form-control" placeholder="Digite o Nome" type="text" name="txt_nome" value="{{ user[0] }}">
+                <label>CNPJ</label><input class="form-control " placeholder="Digite o CNPJ" type="text" name="txt_cnpj" value="{{ user[1] }}" maxlength="18">
+                <label>Inscrição Estadual</label><input class="form-control" placeholder="Digite a Inscrição Estadual" type="text" name="txt_inscricao" value="{{ user[2] }}">
+                <label>Rua</label><input class="form-control" placeholder="Digite a rua" type="text" name="txt_rua" value="{{ user[3] }}">
+                <label>Bairro</label><input class="form-control" placeholder="Digite o bairro" type="text" name="txt_bairro" value="{{ user[4] }}">
+                <label>CEP</label><input class="form-control cep" placeholder="Digite o CEP" type="text" name="txt_cep" value="{{ user[5] }}" maxlength="9">
+                <input class="form-control" placeholder="" type="hidden" name="txt_id" hidden="true" value="{{ user[6] }}">
+                <br>
+                <input class="btn btn-primary" type="submit" value="Salvar alteração">
+            </div>
+        </form>
+        {% endfor %}
+        {% else %}
+        <form action="/cadastrar_concessionaria" method="POST">
+            <div class="form-group" style="margin: 10px;">
+                <label>Nome</label><input class="form-control" placeholder="Digite o Nome" type="text" name="txt_nome">
+                <label>CNPJ</label><input class="form-control " placeholder="Digite o CNPJ" type="text" name="txt_cnpj" maxlength="18">
+                <label>Inscrição Estadual</label><input class="form-control" placeholder="Digite a Inscrição Estadual" type="text" name="txt_inscricao">
+                <label>Rua</label><input class="form-control" placeholder="Digite a rua" type="text" name="txt_rua">
+                <label>Bairro</label><input class="form-control" placeholder="Digite o bairro" type="text" name="txt_bairro">
+                <label>CEP</label><input class="form-control cep" placeholder="Digite o CEP" type="text" name="txt_cep" maxlength="9">
+                <input class="form-control" placeholder="" type="hidden" name="txt_id" hidden="true">
+                <br>
+                <input class="btn btn-primary btn-block" type="submit" value="Cadastrar">
+            </div>
+        </form>
+        {% endif %}
+        <br>
+        <table class="table">
+            <tr>
+                <th>Nome</th>
+                <th>CNPJ</th>
+                <th>Incrição Estadual</th>
+                <th>Rua</th>
+                <th>Bairro</th>
+                <th>CEP</th>
+                <th>Excluir</th>
+                <th>Alterar</th>
+            </tr>
+            {% for user in concessionarias %}
+                <tr>
+                    <td>{{user[0] }}</td>
+                    <td>{{user[1] }}</td>
+                    <td>{{user[2] }}</td>
+                    <td>{{user[3] }}</td>
+                    <td>{{user[4] }}</td>
+                    <td>{{user[5] }}</td>
+                    <td>
+                        <a href= {{ url_for("excluir_concessionaria", user=user[6]) }}><img src="{{url_for('static', filename='img_excluir.png')}}" style="height: 30px; width: 30px;"></a>
+                    </td>
+                    <td>
+                        <a href= {{ url_for("alterar_concessionaria", user=user[6]) }}><img src="{{url_for('static', filename='img_alterar.png')}}" style="height: 30px; width: 30px;"></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+</body>
+</html>
