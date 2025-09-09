@@ -32,6 +32,12 @@ Cada pasta representa uma aula com conteúdos específicos!
 │   ├── templates/
 │   ├── static/
 │   └── env/ (não enviado ao GitHub)
+│
+├── Sub/   # Sistema de Gestão de Concessionárias
+│   ├── app.py
+│   ├── templates/
+│   ├── static/
+│   └── env/ (não enviado ao GitHub)
 ```
 
 ---
@@ -44,6 +50,7 @@ Cada pasta representa uma aula com conteúdos específicos!
 | Aula 2 | 🧮 Calculadora de **IMC (Índice de Massa Corporal)**, com interação via formulário.                                                           |
 | Aula 3 | ⚡ Aplicação de **Tabuada Interativa** usando Flask, com processamento de formulários e templates.                                             |
 | Aula 4 | 🗂️ Sistema completo de **cadastro e autenticação** usando Flask, integração com **MySQL**, e operações de **CRUD** para usuários e clientes. |
+| Sub    | 🚗 Sistema de **gestão de concessionárias**, com CRUD de veículos, concessionárias e usuários, e autenticação de login.                        |
 
 ---
 
@@ -67,6 +74,8 @@ cd python-flask/aula2  # Para a Aula 2
 cd python-flask/aula3  # Para a Aula 3
 # ou
 cd python-flask/aula4  # Para a Aula 4
+# ou
+cd python-flask/Sub    # Para o sistema de gestão
 ```
 
 ---
@@ -101,7 +110,7 @@ source env/bin/activate
 ```bash
 pip install flask
 ```
-#### Para a Aula 4:
+#### Para a Aula 4 e para o projeto Sub:
 ```bash
 pip install flask mysql-connector-python python-dotenv
 ```
@@ -125,6 +134,11 @@ python tabuada.py
 ```
 
 #### Aula 4:
+```bash
+python app.py
+```
+
+#### Sub:
 ```bash
 python app.py
 ```
