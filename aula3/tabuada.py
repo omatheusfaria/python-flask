@@ -8,12 +8,25 @@ def raiz():
 
 @app.route('/calcula_tabuada', methods=['POST'])
 def calcula():
-    numero = int(request.form['txt_numero'])
-    result = {'tabuada_do' : numero, "valores" : []}
+    numero_str = request.form.get('txt_numero')
 
-    for i in range(0,11):
-        r = numero * i
-        result['valores'].append(r)
-    return render_template('index.html', resultado = result)
+    if not numero_str:
+        return render_template('index.html', error="Por favor, digite um número.")
 
-app.run()
+    try:
+        numero = int(numero_str)
+    except ValueError:
+        return render_template('index.html', error="Por favor, digite um número válido.")
+
+    # A list comprehension is a more concise way to generate the list of results.
+    valores = [numero * i for i in range(11)]
+
+    result = {
+        'tabuada_do': numero,
+        "valores": valores
+    }
+
+    return render_template('index.html', resultado=result)
+
+if __name__ == '__main__':
+    app.run(debug=True)

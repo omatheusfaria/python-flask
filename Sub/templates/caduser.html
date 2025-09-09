@@ -3,54 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/bootstrap.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.css') }}">
     <title>Cadastrar Usuario</title>
 </head>
 <body>
-    <nav><a href="/" class="btn btn-primary btn-block" role="button" style="margin: 5px;">Voltar</a></nav>
+    <nav><a href="{{ url_for('menu') }}" class="btn btn-primary btn-block" role="button" style="margin: 5px;">Voltar</a></nav>
     <div class="container">
         <br>
         <h1 style="text-align: center;">Cadastro de Usuário</h1>
-        {%if opcao == "alterar" %}
-         {% for user in usuarios %}
-        <form action="/update_usuario" method="post">
-            <div class="form-group" style="margin: 10px;">
-                <label>Login</label><input class="form-control" placeholder="Digite o Login" type="text" name="txt_login" value="{{ user[0] }}">
-                <label>Senha</label><input class="form-control" placeholder="Digite a Senha" type="password" name="txt_senha">
-                <input class="form-control" placeholder="Digite o login" type="text" name="txt_id" hidden="true" value="{{ user[1] }}">
-                <br>
-                <input class="btn btn-primary" type="submit" value="Salvar alteração">
-            </div>
-        </form>
-        {% endfor %}
+        {% if opcao == "alterar" %}
+            <h2 style="text-align: center;">Alterar Usuário</h2>
+            <form action="{{ url_for('update_usuario') }}" method="post">
+                <div class="form-group" style="margin: 10px;">
+                    <input type="hidden" name="txt_id" value="{{ usuario.id }}">
+                    <div class="mb-3">
+                        <label for="txt_login" class="form-label">Login</label>
+                        <input id="txt_login" class="form-control" placeholder="Digite o Login" type="text" name="txt_login" value="{{ usuario.login }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="txt_senha" class="form-label">Nova Senha</label>
+                        <input id="txt_senha" class="form-control" placeholder="Deixe em branco para não alterar" type="password" name="txt_senha">
+                    </div>
+                    <br>
+                    <input class="btn btn-primary" type="submit" value="Salvar Alteração">
+                </div>
+            </form>
         {% else %}
-        <form action="/cadastrar" method="POST">
-            <div class="form-group" style="margin: 10px;">
-                <label>Login</label><input class="form-control" placeholder="Digite o login" type="text" name="txt_login" required>
-                <label>Senha</label><input class="form-control" placeholder="Digite a senha" type="password" name="txt_senha" required>
-                <br>
-                <input class="btn btn-primary btn-block" type="submit" value="Cadastrar">
-            </div>
-        </form>
+            <h2 style="text-align: center;">Novo Usuário</h2>
+            <form action="{{ url_for('cadastrar_usuario') }}" method="POST">
+                <div class="form-group" style="margin: 10px;">
+                    <div class="mb-3">
+                        <label for="txt_login" class="form-label">Login</label>
+                        <input id="txt_login" class="form-control" placeholder="Digite o login" type="text" name="txt_login" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="txt_senha" class="form-label">Senha</label>
+                        <input id="txt_senha" class="form-control" placeholder="Digite a senha" type="password" name="txt_senha" required>
+                    </div>
+                    <br>
+                    <input class="btn btn-primary btn-block" type="submit" value="Cadastrar">
+                </div>
+            </form>
         {% endif %}
         <br>
+        <hr>
+        <h2 style="text-align: center;">Usuários Cadastrados</h2>
         <table class="table">
-            <tr>
-                <th>Login</th>
-                <th>Excluir</th>
-                <th>Alterar</th>
-            </tr>
-            {% for user in usuarios %}
+            <thead>
                 <tr>
-                    <td>{{user[0] }}</td>
-                    <td>
-                        <a href= {{ url_for("excluir_usuario", user=user[2]) }}><img src="{{url_for('static', filename='img_excluir.png')}}" style="height: 30px; width: 30px;"></a>
-                    </td>
-                    <td>
-                        <a href= {{ url_for("alterar_usuario", user=user[2]) }}><img src="{{url_for('static', filename='img_alterar.png')}}" style="height: 30px; width: 30px;"></a>
-                    </td>
+                    <th>Login</th>
+                    <th>Ações</th>
                 </tr>
-            {% endfor %}
+            </thead>
+            <tbody>
+                {% for user in usuarios %}
+                    <tr>
+                        <td>{{ user.login }}</td>
+                        <td>
+                            <a href="{{ url_for('alterar_usuario', user_id=user.id) }}" class="btn btn-secondary btn-sm">
+                                <img src="{{url_for('static', filename='img_alterar.png')}}" style="height: 20px; width: 20px;" alt="Alterar">
+                            </a>
+                            <a href="{{ url_for('excluir_usuario', user_id=user.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este usuário?');">
+                                <img src="{{url_for('static', filename='img_excluir.png')}}" style="height: 20px; width: 20px;" alt="Excluir">
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
     </div>
 </body>
