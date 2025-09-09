@@ -4,39 +4,57 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE-Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IMC</title>
-    <link rel="stylesheet" type="text/css" href="static/bootstrap.css">
+    <title>Calculadora de IMC</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css') }}">
 </head>
 <body>
-    <h1>Calcular índice de massa corporal utilizando o método POST</h1>
-    <form class="form-control" action="calcular_imc_post" method="post">
-        <label class="form-label">Sua Altura</label>
-        <input class="form-control" type="text" name="txt_altura"><br>
-        <label class="form-label">Seu peso</label>
-        <input class="form-control" type="text" class="form-control-plaintext" name="txt_peso"><br>
-        <input class="btn btn-primary" type="submit" value="calcular">
-        <input class="btn btn-primary" type="reset" value="Limpar">
-    </form>
+    <div class="container">
+        <h1>Calculadora de Índice de Massa Corporal (IMC)</h1>
 
-    <h1>Calcular índice de massa corporal utilizando o método POST</h1>
-    <form class="form-control" action="calcular_imc_get" method="get">
-        <label class="form-label">Sua Altura</label>
-        <input class="form-control" type="text" name="txt_altura"><br>
-        <label class="form-label">Seu peso</label>
-        <input class="form-control" type="text" class="form-control-plaintext" name="txt_peso"><br>
-        <input class="btn btn-primary" type="submit" value="calcular">
-        <input class="btn btn-primary" type="reset" value="Limpar">
-    </form>
-    <h1>{{ res_imc }}</h1>
-    {{IMC}{classificado}}
-    {% if classificado == "MAGREZA" %}
-        <br>
-        <img src="">
-    {% else %}
-        {% if classificado == "SOBREPESO" %}
-            <br>
-            <img src="">
+        <form class="form-control" action="{{ url_for('calcular_imc') }}" method="post">
+            <div class="mb-3">
+                <label for="txt_altura" class="form-label">Sua Altura (em metros, ex: 1.75)</label>
+                <input id="txt_altura" class="form-control" type="text" name="txt_altura" value="{{ request.form.txt_altura or request.args.get('txt_altura', '') }}">
+            </div>
+            <div class="mb-3">
+                <label for="txt_peso" class="form-label">Seu Peso (em kg, ex: 68.5)</label>
+                <input id="txt_peso" class="form-control" type="text" name="txt_peso" value="{{ request.form.txt_peso or request.args.get('txt_peso', '') }}">
+            </div>
+            <button class="btn btn-primary" type="submit">Calcular</button>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">Limpar</a>
+        </form>
+
+        {% if error %}
+            <div class="alert alert-danger mt-3" role="alert">
+                {{ error }}
+            </div>
         {% endif %}
-    {% endif %}
+
+        {% if res_imc and classificado %}
+            <div class="mt-3">
+                <h2>Seu resultado:</h2>
+                <p><strong>IMC:</strong> {{ res_imc }}</p>
+                <p><strong>Classificação:</strong> {{ classificado }}</p>
+
+                {% if classificado.lower() == 'magreza' %}
+                    <div class="alert alert-warning" role="alert">
+                      Atenção! Seu IMC indica magreza. Consulte um profissional de saúde.
+                    </div>
+                {% elif classificado.lower() == 'sobrepeso' %}
+                    <div class="alert alert-warning" role="alert">
+                      Atenção! Seu IMC indica sobrepeso. Considere hábitos mais saudáveis.
+                    </div>
+                {% elif classificado.lower() == 'obesidade' or classificado.lower() == 'obesidade grave' %}
+                    <div class="alert alert-danger" role="alert">
+                      Cuidado! Seu IMC indica obesidade. É altamente recomendável procurar um profissional de saúde.
+                    </div>
+                {% else %}
+                    <div class="alert alert-success" role="alert">
+                      Parabéns! Seu IMC está na faixa considerada normal.
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
 </body>
 </html>
